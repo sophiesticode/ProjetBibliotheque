@@ -1,0 +1,141 @@
+package services;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import mediatek2022.*;
+
+/**
+ * Servlet implementation class ServletRechercheUtilisateur
+ */
+public class ServletAjoutDoc extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletAjoutDoc() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding( "UTF-8" );
+		
+		String msg = "";
+		
+		if(!isNumeric(request.getParameter("type"))) {
+			msg += "Le type doit être un entier<br>";
+		}
+		
+		// champs obligatoires
+		String titre = (String)request.getParameter("titre").trim();;
+		String auteur = (String)request.getParameter("auteur").trim();;
+		String anneeParution = (String)request.getParameter("anneeParution").trim();
+		// + le type
+		
+		// optionnels
+		String ageLimite = (String)request.getParameter("ageLimite").trim();
+		String categorie = (String)request.getParameter("categorie").trim();
+		String description = (String)request.getParameter("description").trim();;
+		
+		titre = formaterStringUrl(titre);
+		auteur = formaterStringUrl(auteur);
+		categorie = formaterStringUrl(categorie);
+		description = formaterStringUrl(description);
+		
+		if(incomplet(titre)) {
+			msg += "Le titre est obligatoire <br>" + auteur;
+		}
+		
+		if(incomplet(auteur)) {
+			msg += "L'auteur est obligatoire<br>"; 
+		}
+		if(incomplet(anneeParution)) {
+			msg += "L'année est obligatoire<br>"; 
+		}
+		if(!msg.equals("")){
+			request.setAttribute("titre", titre);
+			request.setAttribute("auteur", auteur);
+			request.setAttribute("anneeParution", anneeParution);
+			request.setAttribute("ageLimite", ageLimite);
+			request.setAttribute("categorie", categorie);
+			
+			request.setAttribute("msg", msg);
+			
+			request.getRequestDispatcher("AjoutDoc.jsp").forward(request, response);
+		}
+		int type = Integer.parseInt(request.getParameter("type"));
+		
+		try  {
+			
+			if(ageLimite.equals("")) ageLimite = "null";
+			if(categorie.equals("")) categorie = "null";
+			if(description.equals("")) description = "null";
+			
+			msg = type + "|||" + titre+ "|||" +auteur+ "|||" +anneeParution+ "|||" +ageLimite+ "|||" +categorie+ "|||" +description;
+			Mediatheque.getInstance().ajoutDocument(type, titre, auteur, anneeParution, ageLimite, categorie, description);
+			//request.setAttribute("msg", "Document ajouté !");
+			request.setAttribute("msg", msg);
+		} 
+		catch (Exception e) {
+			request.setAttribute("msg", "Une erreur s'est produite");
+		}
+
+		request.getRequestDispatcher("resultatAjoutDoc.jsp").forward(request, response);
+		
+	}
+	
+	private boolean incomplet(String champ) {
+		return champ.equals("null") || champ.equals("");
+	}
+	
+	private static boolean isNumeric(String string) {
+		try {
+			Integer.parseInt(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
+	
+	
+	public static String remplacerString(String url, String avant, String apres) {
+		Pattern p = Pattern.compile(avant);  
+		Matcher m = p.matcher(url) ;  
+		  
+		return m.replaceAll(apres) ; 
+	}
+	
+	public static String formaterStringUrl(String url) {
+		url = remplacerString(url, ";", (char)59 + "");
+		url = remplacerString(url, ":", (char)58 + "");
+		url = remplacerString(url, ('"' + ""), ("'"));
+		url = remplacerString(url, ("'"), (char)39 + "");
+		//url = remplacerString(url, ("%27"), (char)34 + "");
+		return url;
+	}
+	
+	public static void main(String[] args) {
+		String titre = "machin"+'"';
+		titre = remplacerString(titre, '"' + "", "'ty");
+		System.out.println(titre);
+		
+	}
+	
+	
+
+}

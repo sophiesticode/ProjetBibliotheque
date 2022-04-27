@@ -1,0 +1,129 @@
+package services;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import mediatek2022.*;
+
+/**
+ * Servlet d'ajout de document
+ */
+public class ServletAjoutDoc extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletAjoutDoc() {
+        super();
+    }
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		String msg = "";
+		
+		// champs obligatoires
+		String titre = (String)request.getParameter("titre");
+		String anneeParution = (String)request.getParameter("anneeParution");
+		String categorie = (String)request.getParameter("categorie");
+		String typeStr = (String)request.getParameter("type");
+		String de = (String)request.getParameter("de");
+		
+		// dependants du type de document (null si non rempli)
+		String ageLimite = (String)request.getParameter("ageLimite");
+		String nbElements = (String)request.getParameter("nbElements");
+		String duree = (String)request.getParameter("duree");
+
+		if(typeStr == null) {
+			msg += "Le type est obligatoire<br>";
+		}
+		
+		titre = formaterStringUrl(titre);
+		anneeParution = formaterStringUrl(anneeParution);
+		categorie = formaterStringUrl(categorie);
+		de = formaterStringUrl(de);
+		
+		if(incomplet(titre)) {
+			msg += "Le titre est obligatoire <br>";
+		}
+		
+		if(incomplet(de)) {
+			msg += "L'auteur est obligatoire<br>"; 
+		}
+		if(incomplet(anneeParution)|| !isNumeric(anneeParution)) {
+			msg += "L'année est obligatoire. Ce doit être un numérique<br>"; 
+		}
+		if(!msg.equals("")){
+			request.setAttribute("titre", titre);
+			request.setAttribute("anneeParution", anneeParution);
+			request.setAttribute("de", de);
+			
+			request.setAttribute("ageLimite", ageLimite);
+			request.setAttribute("nbElements", nbElements);
+			request.setAttribute("duree", duree);
+			
+			request.setAttribute("msg", msg);
+			
+			request.getRequestDispatcher("ajoutDynamique.jsp").forward(request, response);
+		}
+		
+		synchronized(Mediatheque.getInstance()) {
+			try  {
+				int type = Integer.parseInt(typeStr);
+				if((ageLimite == null) || (ageLimite.equals(""))) ageLimite = "null";
+				if((nbElements == null) || (nbElements.equals(""))) nbElements = "null";
+				if((duree == null) || (duree.equals(""))) duree = null;
+				
+				Mediatheque.getInstance().ajoutDocument(type, titre, de, anneeParution, categorie, ageLimite, nbElements, duree);
+				
+				request.setAttribute("msg", "Document ajouté !");
+			} 
+			catch (Exception e) {
+				request.setAttribute("msg", "Une erreur s'est produite" + e);
+			}
+		}
+
+		request.getRequestDispatcher("resultatAjoutDoc.jsp").forward(request, response);
+		
+	}
+	
+	private boolean incomplet(String champ) {
+		return champ==null || champ.equals("null") || champ.equals("");
+	}
+	
+	private static boolean isNumeric(String string) {
+		try {
+			Integer.parseInt(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public static String remplacerString(String url, String avant, String apres) {
+		Pattern p = Pattern.compile(avant);  
+		Matcher m = p.matcher(url) ;  
+		  
+		return m.replaceAll(apres) ; 
+	}
+	
+	public String formaterStringUrl(String url) {
+		url = remplacerString(url, ";", (char)59 + "");
+		url = remplacerString(url, ":", (char)58 + "");
+		url = remplacerString(url, ('"' + ""), ("'"));
+		url = remplacerString(url, ("'"), (char)39 + "");
+		return url;
+	}
+	
+}

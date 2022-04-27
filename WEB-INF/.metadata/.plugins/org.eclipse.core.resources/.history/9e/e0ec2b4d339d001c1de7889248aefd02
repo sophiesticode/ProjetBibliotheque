@@ -1,0 +1,24 @@
+package persistance;
+
+public class Bibliothecaire extends UtilisateurBibli {
+	private int id;
+	
+	public Bibliothecaire(int id, String nom) {
+		super(nom);
+		this.id = id;
+	}
+
+	public boolean isBibliothecaire() {
+		return true;
+	}
+
+	/*
+	 * @return data[0] : id
+	 */
+	@Override
+	public Object[] data() {
+		Object[] donnees = new Object[3];
+		donnees[0] = this.id;
+		return donnees;
+	}
+}

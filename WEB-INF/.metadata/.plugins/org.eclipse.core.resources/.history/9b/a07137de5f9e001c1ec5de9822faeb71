@@ -1,0 +1,23 @@
+package persistance;
+
+/* Un bibliothécaire de la médiathèque */
+public class Bibliothecaire extends UtilisateurBibli {
+	
+	public Bibliothecaire(int id, String nom) {
+		super(id, nom);
+	}
+
+	public boolean isBibliothecaire() {
+		return true;
+	}
+
+	/*
+	 * @return data[0] : id
+	 */
+	@Override
+	public Object[] data() {
+		Object[] donnees = new Object[1];
+		donnees[0] = this.id;
+		return donnees;
+	}
+}

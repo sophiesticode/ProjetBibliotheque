@@ -1,0 +1,27 @@
+package services;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+/**
+ * Servlet d'initialisation
+ */
+@WebListener
+public class ServletInit implements ServletContextListener {
+	
+	@Override
+	public void contextInitialized(ServletContextEvent event){
+		
+		try {
+			Class.forName("persistance.MediathequeData");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
+	}
+
+}

@@ -1,0 +1,29 @@
+package persistance;
+
+import mediatek2022.Utilisateur;
+
+
+/* Classe généraliste pour les utilisateurs */
+public abstract class UtilisateurBibli implements Utilisateur {
+	private String login;
+	// on ne stocke le mot de passe que dans la BD
+	
+	public UtilisateurBibli(String login) {
+		this.login = login;
+	}
+	
+	/*
+	 * return true si est bibliothecaire
+	 */
+	public boolean isBibliothecaire() {
+		return false;
+	}
+	
+	@Override
+	public String name() {
+		return login;
+	}
+	
+	public abstract Object[] data();
+
+}

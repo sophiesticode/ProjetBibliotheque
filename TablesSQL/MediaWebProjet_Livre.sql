@@ -1,0 +1,16 @@
+
+DROP TABLE IF EXISTS `Livre`;
+
+CREATE TABLE `Livre` (
+  `numDoc` int NOT NULL AUTO_INCREMENT,
+  `nbPages` int DEFAULT NULL,
+  PRIMARY KEY (`numDoc`),
+  CONSTRAINT `FK_DocumentLivre` FOREIGN KEY (`numDoc`) REFERENCES `Document` (`num`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+LOCK TABLES `Livre` WRITE;
+
+INSERT INTO `Livre` VALUES (1,135),(21,186),(38,200);
+
+UNLOCK TABLES;
+

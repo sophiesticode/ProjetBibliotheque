@@ -1,0 +1,15 @@
+package persistance;
+
+import mediatek2022.Document;
+
+/* La fabrique de documents */
+public class Document_Factory {
+	public static Document creerDocument(int type, int num, String titre, String anneeParution, int id_u, String de, String categorie, int ageLim, int nbElements, String duree) {
+		switch(type) {
+		case 1: return new Document_CD(num, titre, anneeParution, id_u, categorie, de, nbElements); 
+		case 2: return new Document_DVD(num, titre, anneeParution, id_u, categorie, de, duree, ageLim);  
+		case 3: return new Document_Livre(num, titre, anneeParution, id_u, categorie, de, nbElements);  
+		default: return null;
+		}
+	}
+}

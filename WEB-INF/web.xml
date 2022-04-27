@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+		 version="2.4">
+
+<display-name>Projet Mediatek 2022</display-name>
+<description>
+	Ce projet d'APP_WEB_JAVA est une application de gestion d'une mediatheque.
+</description>
+
+<listener>
+    <listener-class>services.ServletInit</listener-class>
+</listener>
+
+<servlet>
+	<servlet-name>ServletConnexion</servlet-name>
+	<servlet-class>services.ServletConnexion</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletConnexion</servlet-name>
+	<url-pattern>/connexion</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletVitrine</servlet-name>
+	<servlet-class>services.ServletVitrine</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletVitrine</servlet-name>
+	<url-pattern>/vitrine</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletEmpruntDoc</servlet-name>
+	<servlet-class>services.ServletEmpruntDoc</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletEmpruntDoc</servlet-name>
+	<url-pattern>/empruntDoc</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletChoixType</servlet-name>
+	<servlet-class>services.ServletChoixType</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletChoixType</servlet-name>
+	<url-pattern>/choixType</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletAjoutDoc_CD</servlet-name>
+	<servlet-class>services.ServletAjoutDoc_CD</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletAjoutDoc_CD</servlet-name>
+	<url-pattern>/ajoutDoc_CD</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletAjoutDoc_DVD</servlet-name>
+	<servlet-class>services.ServletAjoutDoc_DVD</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletAjoutDoc_DVD</servlet-name>
+	<url-pattern>/ajoutDoc_DVD</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletAjoutDoc_Livre</servlet-name>
+	<servlet-class>services.ServletAjoutDoc_Livre</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletAjoutDoc_Livre</servlet-name>
+	<url-pattern>/ajoutDoc_Livre</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletRetourDoc</servlet-name>
+	<servlet-class>services.ServletRetourDoc</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletRetourDoc</servlet-name>
+	<url-pattern>/retourDoc</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ServletDeconnexion</servlet-name>
+	<servlet-class>services.ServletDeconnexion</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletDeconnexion</servlet-name>
+	<url-pattern>/deconnexion</url-pattern>
+</servlet-mapping>
+
+</web-app>
